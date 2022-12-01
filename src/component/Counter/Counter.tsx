@@ -1,30 +1,28 @@
 import React from 'react';
 import s from "./Counter.module.css";
 
-type PropsType = {
+export type CounterPropsType = {
     error: boolean
     count: number
-    incr: ()=> void
-    resetValue : ()=> void
+    incr: () => void
+    resetValue: () => void
     disableCount: boolean
     disableReset: boolean
+    isChanges: boolean
 }
 
 
-const Counter = (props: PropsType) => {
+const Counter = (props: CounterPropsType) => {
+    const windowView = props.isChanges ? props.error ?
+
+            <div className={props.error ? s.viewError : s.view}>Incorrect value</div> :
+            <div className={s.view}>Click on "Set"</div> :
+        <div className={props.error ? s.viewError : s.view}>{props.count}</div>
     return (
-        <div>
-            {
-                props.error  ? <div className={s.viewError}>{props.count}</div>: <div className={s.view}>{props.count}</div>
-            }
-
-
-
-
-
-
-            <button disabled={props.disableCount} onClick={props.incr}>+</button>
-            <button disabled={props.disableReset} onClick={props.resetValue}>0</button>
+        <div className={s.counterContainer}>
+            {windowView}
+            <button disabled={props.disableCount} className={s.buttonCount} onClick={props.incr}>inr</button>
+            <button disabled={props.disableReset} className={s.buttonCount} onClick={props.resetValue}>reset</button>
         </div>
     );
 };

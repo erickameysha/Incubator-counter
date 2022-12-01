@@ -1,7 +1,6 @@
-import React, {ChangeEvent, useEffect, useState} from 'react';
-import s from './Counter/Counter.module.css'
-import Counter from "./Counter/Counter";
-import SettingCounter from "./SettingCounter/SettingCounter";
+import React, {useEffect, useState} from 'react';
+
+import CounterRepresentation from "./CounterRepresentation";
 
 const CounterContainer = () => {
     let initialState = 0
@@ -10,7 +9,7 @@ const CounterContainer = () => {
     let [maxValue, setMaxValue] = useState(initialMaxValue)
     let [count, setCount] = useState(minValue)
     let [error, setError] = useState(false)
-    let [errorMassage, setErrorMessage] = useState<null | string>(null)
+    let [isChanges, setIsChanges] = useState(false)
     const incr = () => {
         if (count != maxValue) {
             setCount(count + 1)
@@ -23,7 +22,6 @@ const CounterContainer = () => {
         if (count >= maxValue) {
             setError(true)
         }
-
 
 
     }, [count])
@@ -42,25 +40,39 @@ const CounterContainer = () => {
         setMinValue(setMinValueProps)
         setCount(setMinValueProps)
         setError(false)
-
+        setIsChanges(false)
         setMaxValue(setMaxValueProps)
     }
+    const checkChanges = (localMaxValue: number, localMinValue: number) => {
+        if (localMaxValue !== maxValue || localMinValue !== minValue) {
+            setIsChanges(true)
+        }
 
+    }
+    const validationInterval = (localMaxValue: number, localMinValue: number) => {
+        if (localMinValue >= localMaxValue || localMinValue < 0) {
+            setError(true)
+        } else {
+            setError(false)
+        }
+    }
 
     return (
         <div>
-            <Counter
+            <CounterRepresentation
+                isChanges={isChanges}
                 error={error}
-                disableReset={disableReset}
                 count={count}
                 incr={incr}
                 resetValue={resetValue}
                 disableCount={disableCount}
+                disableReset={disableReset}
+                minValue={minValue}
+                maxValue={maxValue}
+                setSettingChange={setSettingChange}
+                validationInterval={validationInterval}
+                checkChanges={checkChanges}
             />
-
-
-
-
         </div>
     );
 };

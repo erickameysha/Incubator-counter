@@ -1,9 +1,27 @@
 .view {
     color: #ffffff;
+    min-width: 50px;
+    background: #00eaff;
+    padding: 28px;
 }
 
 
 
 .viewError{
     color: red;
+    min-width: 50px;
+    background: #00eaff;
+    padding: 28px;
+}
+.counterContainer{
+    min-width: 250px;
+    min-height: 150px;
+    border: 5px solid #00eaff;
+    padding: 14px;
+}
+
+.buttonCount{
+    background: #00eaff;
+    /* font-size: 16px; */
+    padding: 5px 19px;
 }

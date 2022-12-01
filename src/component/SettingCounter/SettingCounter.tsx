@@ -1,36 +1,44 @@
-import React, {ChangeEvent, useState} from 'react';
+import React, {ChangeEvent, useEffect, useState} from 'react';
 
-type PropsType ={
-    minValue:number
+export type SettingPropsType = {
+    minValue: number
     maxValue: number
     setSettingChange: (setMinValueProps: number, setMaxValueProps: number) => void
+    validationInterval:(localMaxValue: number, localMinValue: number) =>void
+    checkChanges:(localMaxValue: number, localMinValue: number) =>void
 }
-const SettingCounter = (props: PropsType) => {
+const SettingCounter = (props: SettingPropsType) => {
 
     let [settingCount, setSettingCount] = useState(props.minValue)
     let [settingMaxCount, setSettingMaxCount] = useState(props.maxValue)
     const setMaxCountHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        let onChangeHandler = +e.currentTarget.value
-        setSettingMaxCount(onChangeHandler)
-
-
-
+        setSettingMaxCount( +e.currentTarget.value)
+        props.checkChanges(settingMaxCount, settingCount)
+        props.validationInterval(settingMaxCount, settingCount)
 
     }
     const setMinCountHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        let onChangeHandler = +e.currentTarget.value
-        setSettingCount(onChangeHandler)
-
+        setSettingCount(+e.currentTarget.value)
+        props.checkChanges(settingMaxCount, settingCount)
+        props.validationInterval(settingMaxCount, settingCount)
     }
     const buttonHandler = () => {
         props.setSettingChange(settingCount, settingMaxCount)
     }
+    useEffect(() => {
+        props.checkChanges(settingMaxCount, settingCount)
+        props.validationInterval(settingMaxCount, settingCount)
+    }, [settingCount, settingMaxCount])
 
     return (
         <div>
-            Min Value <input type="number" onChange={setMinCountHandler} value={settingCount}/>
-            maxValue <input type="number" onChange={setMaxCountHandler} value={settingMaxCount}/>
-            <button onClick={buttonHandler}> set</button>
+            <div>
+                <div>
+                    <div>minValue: <input type="number" onChange={setMinCountHandler} value={settingCount}/></div>
+                    <div> maxValue: <input type="number" onChange={setMaxCountHandler} value={settingMaxCount}/></div>
+                </div>
+                <button onClick={buttonHandler}> set</button>
+            </div>
         </div>
     );
 };
